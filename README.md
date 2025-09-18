@@ -1,17 +1,17 @@
-# AWS S3 Bucket - Hereya Component
+# AWS S3 Bucket - Hereya Package
 
 A secure AWS S3 bucket provisioned through AWS CDK with enterprise-grade security settings, designed for use with the Hereya platform.
 
 ## 🚀 Quick Start with Hereya
 
 ```bash
-# Add this component to your Hereya project
+# Add this package to your Hereya project
 hereya add aws/s3bucket
 ```
 
 ## 📦 What This Package Does
 
-This Hereya component provisions a production-ready AWS S3 bucket with:
+This Hereya package provisions a production-ready AWS S3 bucket with:
 
 - **🔐 Security First**: All public access blocked, server-side encryption (AES256)
 - **📚 Versioning**: Built-in object versioning for data protection
@@ -144,7 +144,7 @@ STACK_NAME=my-stack npx cdk destroy
 
 ## 🧪 Testing
 
-The component includes comprehensive Jest tests that verify:
+The package includes comprehensive Jest tests that verify:
 
 - S3 bucket security configuration
 - CloudFormation outputs generation

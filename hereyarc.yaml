@@ -1,0 +1,6 @@
+name: aws/s3bucket
+version: 0.1.1
+description: "Provisions a secure S3 bucket with versioning, encryption, and blocked public access."
+visibility: public # can be public or private
+iac: cdk
+infra: aws

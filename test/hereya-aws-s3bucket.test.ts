@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import { Template, Match } from 'aws-cdk-lib/assertions';
+import { Template } from 'aws-cdk-lib/assertions';
 import * as HereyaAwsS3Bucket from '../lib/hereya-aws-s3bucket-stack';
 
 describe('HereyaAwsS3BucketStack', () => {
@@ -74,9 +74,9 @@ describe('HereyaAwsS3BucketStack', () => {
     const stack = new HereyaAwsS3Bucket.HereyaAwsS3BucketStack(app, 'MyTestStack');
     const template = Template.fromStack(stack);
 
-    // Check that bucket name starts with the test prefix
+    // Check that bucket name uses the test prefix with stack name
     template.hasResourceProperties('AWS::S3::Bucket', {
-      BucketName: Match.stringLikeRegexp('^test-prefix-.*')
+      BucketName: 'test-prefix-myteststack'
     });
 
     process.env.namePrefix = originalEnv;
@@ -89,19 +89,35 @@ describe('HereyaAwsS3BucketStack', () => {
     const stack = new HereyaAwsS3Bucket.HereyaAwsS3BucketStack(app, 'MyTestStack');
     const template = Template.fromStack(stack);
 
-    // Check that bucket name starts with the default prefix
+    // Check that bucket name uses the default prefix with stack name
     template.hasResourceProperties('AWS::S3::Bucket', {
-      BucketName: Match.stringLikeRegexp('^hereya-.*')
+      BucketName: 'hereya-myteststack'
     });
   });
 
-  test('S3 Bucket name is stable across multiple stack instances', () => {
+  test('S3 Bucket name uses stack name as suffix', () => {
+    const app = new cdk.App();
+    const stackName = 'TestStack';
+    const stack = new HereyaAwsS3Bucket.HereyaAwsS3BucketStack(app, stackName);
+    const template = Template.fromStack(stack);
+
+    // Get bucket name from template
+    const json = template.toJSON();
+    const bucket = Object.values(json.Resources).find(
+      (r: any) => r.Type === 'AWS::S3::Bucket'
+    ) as any;
+
+    // Verify that bucket name follows the expected format: prefix-stackname
+    expect(bucket.Properties.BucketName).toBe('hereya-teststack');
+  });
+
+  test('S3 Bucket name is consistent with same stack name', () => {
     const app1 = new cdk.App();
-    const stack1 = new HereyaAwsS3Bucket.HereyaAwsS3BucketStack(app1, 'TestStack');
+    const stack1 = new HereyaAwsS3Bucket.HereyaAwsS3BucketStack(app1, 'MyStack');
     const template1 = Template.fromStack(stack1);
 
     const app2 = new cdk.App();
-    const stack2 = new HereyaAwsS3Bucket.HereyaAwsS3BucketStack(app2, 'TestStack');
+    const stack2 = new HereyaAwsS3Bucket.HereyaAwsS3BucketStack(app2, 'MyStack');
     const template2 = Template.fromStack(stack2);
 
     // Get bucket names from both templates
@@ -116,7 +132,9 @@ describe('HereyaAwsS3BucketStack', () => {
       (r: any) => r.Type === 'AWS::S3::Bucket'
     ) as any;
 
-    // Verify that bucket names are identical (stable)
+    // Verify that bucket names are identical when stack names are the same
+    expect(bucket1.Properties.BucketName).toBe('hereya-mystack');
+    expect(bucket2.Properties.BucketName).toBe('hereya-mystack');
     expect(bucket1.Properties.BucketName).toEqual(bucket2.Properties.BucketName);
   });
 

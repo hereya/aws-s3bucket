@@ -14,15 +14,8 @@ export class HereyaAwsS3BucketStack extends Stack {
     // Optional auto-delete objects from environment variable (defaults to false for safety)
     const autoDeleteObjects = process.env.autoDeleteObjects === 'true';
 
-    // Generate a stable, unique suffix based on stack name and construct tree
-    const uniqueSuffix = Names.uniqueResourceName(this, {
-      maxLength: 63 - bucketPrefix.length - 1, // Reserve space for prefix and hyphen
-      separator: '-',
-      allowedSpecialCharacters: '-'
-    });
-
     // Create a stable bucket name with prefix and CDK-generated suffix
-    const bucketName = `${bucketPrefix}-${uniqueSuffix}`.toLowerCase();
+    const bucketName = `${bucketPrefix}-${this.stackName}`.toLowerCase();
 
     const bucket = new s3.Bucket(this, 'HereyaS3Bucket', {
       bucketName,

@@ -1,6 +1,6 @@
 {
   "name": "hereya-aws-s3bucket",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "bin": {
     "hereya-aws-s3bucket": "bin/hereya-aws-s3bucket.js"
   },

@@ -55,5 +55,10 @@ export class HereyaAwsS3BucketStack extends Stack {
       value: JSON.stringify(policyDocument.toJSON()),
       description: 'IAM policy document for S3 bucket permissions'
     });
+
+    new cdk.CfnOutput(this, 'useAwsVpcEndpointS3', {
+      value: 'true',
+      description: 'Use AWS VPC endpoint for S3'
+    });
   }
 }

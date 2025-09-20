@@ -37,6 +37,13 @@ export class HereyaAwsS3BucketStack extends Stack {
             's3:DeleteObject'
           ],
           resources: [`${bucket.bucketArn}/*`]
+        }),
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: [
+            's3:ListBucket'
+          ],
+          resources: [bucket.bucketArn]
         })
       ]
     });

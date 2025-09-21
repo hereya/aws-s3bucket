@@ -9,7 +9,7 @@ export class HereyaAwsS3BucketStack extends Stack {
     super(scope, id, props);
 
     // Optional prefix from environment variable
-    const bucketPrefix = process.env.namePrefix || 'hereya';
+    const bucketPrefix = process.env.namePrefix || 'app';
 
     // Optional auto-delete objects from environment variable (defaults to false for safety)
     const autoDeleteObjects = process.env.autoDeleteObjects === 'true';
